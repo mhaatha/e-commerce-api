@@ -1,0 +1,62 @@
+openapi: 3.0.3
+info:
+  title: E-Commerce API
+  description: API specification for E-Commerce
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:5000
+tags:
+  - name: User API
+    description: handles user account management such as registration, profile updates, and account deletion.
+paths:
+  /api/v1/users:
+    post:
+      summary: register a user
+      operationId: registerANewUser
+      tags:
+        - User API
+      requestBody:
+        description: required data to register as a new user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phone_number:
+                  type: string
+                  example: "081234567890"
+                type:
+                  type: string
+                  enum:
+                    - user
+                    - merchant
+                password:
+                  type: string
+      responses:
+        "200":
+          description: success create a user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      full_name:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                          - user
+                          - merchant
