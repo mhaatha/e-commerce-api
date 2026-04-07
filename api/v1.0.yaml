@@ -7,29 +7,40 @@ servers:
   - url: http://127.0.0.1:5000
 tags:
   - name: User API
-    description: handles user account management such as registration, profile updates, and account deletion.
+    description: Handles user account management such as registration, profile updates, and account deletion.
 paths:
   /api/v1/users:
     post:
-      summary: register a user
+      summary: Register a user
       operationId: registerANewUser
       tags:
         - User API
       requestBody:
-        description: required data to register as a new user
+        description: Required data to register as a new user
         content:
           application/json:
             schema:
+              required:
+                - fullName
+                - type
+                - password
               type: object
               properties:
-                full_name:
+                fullName:
                   type: string
+                  minLength: 1
+                  example: John Doe
                 email:
                   type: string
                   format: email
-                phone_number:
+                  minLength: 3
+                  maxLength: 254
+                  example: johndoe@example.com
+                phoneNumber:
                   type: string
                   example: "081234567890"
+                  minLength: 4
+                  maxLength: 15
                 type:
                   type: string
                   enum:
@@ -39,7 +50,7 @@ paths:
                   type: string
       responses:
         "200":
-          description: success create a user
+          description: Success registered a user
           content:
             application/json:
               schema:
@@ -53,8 +64,9 @@ paths:
                       id:
                         type: string
                         format: uuid
-                      full_name:
+                      fullName:
                         type: string
+                        example: John Doe
                       type:
                         type: string
                         enum:
