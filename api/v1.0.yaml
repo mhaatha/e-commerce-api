@@ -6,51 +6,45 @@ info:
 servers:
   - url: http://127.0.0.1:5000
 tags:
-  - name: User API
-    description: Handles user account management such as registration, profile updates, and account deletion.
+  - name: Product API
+    description: Handles product management such as show the products, update it, delete it, etc.
 paths:
-  /api/v1/users:
+  /api/v1/products:
     post:
-      summary: Register a user
-      operationId: registerANewUser
+      summary: Insert a new product
+      operationId: insertProduct
       tags:
-        - User API
+        - Product API
       requestBody:
-        description: Required data to register as a new user
+        description: Required data to insert a new product
         content:
           application/json:
             schema:
               required:
-                - fullName
-                - type
-                - password
+                - name
+                - quantity
+                - price
               type: object
               properties:
-                fullName:
+                name:
                   type: string
-                  minLength: 1
-                  example: John Doe
-                email:
-                  type: string
-                  format: email
                   minLength: 3
-                  maxLength: 254
-                  example: johndoe@example.com
-                phoneNumber:
+                quantity:
+                  type: integer
+                  minimum: 0
+                price:
+                  type: number
+                  minimum: 0
+                description:
                   type: string
-                  example: "081234567890"
-                  minLength: 4
-                  maxLength: 15
-                type:
-                  type: string
-                  enum:
-                    - user
-                    - merchant
-                password:
-                  type: string
+              example:
+                name: Kinera Celest Wyvern White
+                quantity: 11
+                price: 528.993
+                description: Garansi resmi 1 tahun
       responses:
         "200":
-          description: Success registered a user
+          description: Success insert a new product
           content:
             application/json:
               schema:
@@ -58,17 +52,24 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Success insert the product
                   data:
                     type: object
                     properties:
                       id:
                         type: string
                         format: uuid
-                      fullName:
+                      name:
                         type: string
-                        example: John Doe
-                      type:
+                      quantity:
+                        type: integer
+                      price:
+                        type: number
+                      description:
                         type: string
-                        enum:
-                          - user
-                          - merchant
+                    example:
+                      id: dcc02b52-a93e-4326-ae81-d1560f3b91d3
+                      name: Kinera Celest Wyvern White
+                      quantity: 11
+                      price: 528.993
+                      description: Garansi resmi 1 tahun
