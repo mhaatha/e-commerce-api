@@ -16,62 +16,156 @@ paths:
       tags:
         - Product API
       requestBody:
-        description: Required data to create a new product
-        content:
-          application/json:
-            schema:
-              required:
-                - name
-                - quantity
-                - price
-              type: object
-              properties:
-                name:
-                  type: string
-                  minLength: 3
-                quantity:
-                  type: integer
-                  minimum: 0
-                price:
-                  type: number
-                  format: float
-                  minimum: 0
-                description:
-                  type: string
-              example:
-                name: Kinera Celest Wyvern White
-                quantity: 11
-                price: 528.993
-                description: Garansi resmi 1 tahun
+        $ref: "#/components/requestBodies/CreateProduct"
       responses:
         "201":
-          description: Success create a new product
-          content:
-            application/json:
-              schema:
+          $ref: "#/components/responses/CreateProductSuccess"
+        "400":
+          $ref: "#/components/responses/CreateProductBadRequest"
+        "401":
+          $ref: "#/components/responses/CreateProductUnauthorized"
+        "403":
+          $ref: "#/components/responses/CreateProductForbidden"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  requestBodies:
+    CreateProduct:
+      description: Create product request body
+      content:
+        application/json:
+          schema:
+            required:
+              - name
+              - quantity
+              - price
+            type: object
+            properties:
+              name:
+                type: string
+                minLength: 3
+                maxLength: 150
+                example: Kinera Celest Wyvern White
+              quantity:
+                type: integer
+                minimum: 0
+                example: 11
+              price:
+                type: number
+                format: float
+                minimum: 0
+                example: 528.993
+              description:
+                type: string
+                minLength: 3
+                maxLength: 2000
+                example: Garansi resmi 1 tahun
+
+  responses:
+    CreateProductSuccess:
+      description: Success create a new product
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Success create the product
+              data:
                 type: object
                 properties:
-                  message:
+                  id:
                     type: string
-                    example: Success create the product
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        format: uuid
-                      name:
-                        type: string
-                      quantity:
-                        type: integer
-                      price:
-                        type: number
-                        format: float
-                      description:
-                        type: string
-                    example:
-                      id: dcc02b52-a93e-4326-ae81-d1560f3b91d3
-                      name: Kinera Celest Wyvern White
-                      quantity: 11
-                      price: 528.993
-                      description: Garansi resmi 1 tahun
+                    format: uuid
+                    example: dcc02b52-a93e-4326-ae81-d1560f3b91d3
+                  name:
+                    type: string
+                    example: Kinera Celest Wyvern White
+                  quantity:
+                    type: integer
+                    example: 11
+                  price:
+                    type: number
+                    format: float
+                    example: 528.993
+                  description:
+                    type: string
+                    example: Garansi resmi 1 tahun
+    CreateProductBadRequest:
+      description: Failed to create a new product caused by invalid request body
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Bad Request
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    details:
+                      type: string
+                example:
+                  - details: Field `name` must be 3 characters at least
+                  - details: Field `price` can't less than 0
+    CreateProductUnauthorized:
+      description: Failed to create a new product caused by unauthorized user
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Unauthorized
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    details:
+                      type: string
+                example:
+                  - details: Unauthorized user. Please log in to an existing user or register a new user
+    CreateProductForbidden:
+      description: Failed to create a new product caused by forbidden access
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Forbidden
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    details:
+                      type: string
+                example:
+                  - details: Forbidden access. You're not allowed to do this operation
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Internal server error
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    details:
+                      type: string
+                example:
+                  - details: Please try again later
