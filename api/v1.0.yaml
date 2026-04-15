@@ -29,37 +29,108 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
 components:
+  schemas:
+    ProductBase:
+      description: Product base schema
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 150
+          example: Kinera Celest Wyvern White
+        quantity:
+          type: integer
+          minimum: 0
+          example: 11
+        price:
+          type: number
+          format: float
+          minimum: 0
+          example: 528.993
+        description:
+          type: string
+          minLength: 3
+          maxLength: 2000
+          example: Garansi resmi 1 tahun
+    CreateProductRequest:
+      $ref: "#/components/schemas/ProductBase"
+    Product:
+      description: Product data
+      allOf:
+        - $ref: "#/components/schemas/ProductBase"
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: dcc02b52-a93e-4326-ae81-d1560f3b91d3
+          required:
+            - id
+    CreateProductBadRequestResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: INVALID_INPUT
+            message:
+              type: string
+              example: Invalid request body
+            fields:
+              type: object
+              properties:
+                additionalProperties:
+                  type: string
+    UnauthorizedResponse:
+      description: Unauthorized response schema
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: UNAUTHORIZED
+            message:
+              type: string
+              example: Unauthorized user. Please log in to an existing user or register a new user
+    ForbiddenResponse:
+      description: Forbidden response schema
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: FORBIDDEN
+            message:
+              type: string
+              example: Forbidden access. You're not allowed to do this operation
+    InternalServerErrorResponse:
+      description: Internal server error response schema
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: INTERNAL_SERVER_ERROR
+            message:
+              type: string
+              example: We're sorry your operation can't be executed during this time due to internal problem. Please try again later
+
   requestBodies:
     CreateProduct:
       description: Create product request body
       content:
         application/json:
           schema:
-            required:
-              - name
-              - quantity
-              - price
-            type: object
-            properties:
-              name:
-                type: string
-                minLength: 3
-                maxLength: 150
-                example: Kinera Celest Wyvern White
-              quantity:
-                type: integer
-                minimum: 0
-                example: 11
-              price:
-                type: number
-                format: float
-                minimum: 0
-                example: 528.993
-              description:
-                type: string
-                minLength: 3
-                maxLength: 2000
-                example: Garansi resmi 1 tahun
+            $ref: "#/components/schemas/CreateProductRequest"
 
   responses:
     CreateProductSuccess:
@@ -67,105 +138,28 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Success create the product
-              data:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: dcc02b52-a93e-4326-ae81-d1560f3b91d3
-                  name:
-                    type: string
-                    example: Kinera Celest Wyvern White
-                  quantity:
-                    type: integer
-                    example: 11
-                  price:
-                    type: number
-                    format: float
-                    example: 528.993
-                  description:
-                    type: string
-                    example: Garansi resmi 1 tahun
+            $ref: "#/components/schemas/Product"
     CreateProductBadRequest:
       description: Failed to create a new product caused by invalid request body
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Bad Request
-              errors:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    details:
-                      type: string
-                example:
-                  - details: Field `name` must be 3 characters at least
-                  - details: Field `price` can't less than 0
+            $ref: "#/components/schemas/CreateProductBadRequestResponse"
     CreateProductUnauthorized:
       description: Failed to create a new product caused by unauthorized user
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Unauthorized
-              errors:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    details:
-                      type: string
-                example:
-                  - details: Unauthorized user. Please log in to an existing user or register a new user
+            $ref: "#/components/schemas/UnauthorizedResponse"
     CreateProductForbidden:
       description: Failed to create a new product caused by forbidden access
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Forbidden
-              errors:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    details:
-                      type: string
-                example:
-                  - details: Forbidden access. You're not allowed to do this operation
+            $ref: "#/components/schemas/ForbiddenResponse"
     InternalServerError:
       description: Internal server error
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Internal server error
-              errors:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    details:
-                      type: string
-                example:
-                  - details: Please try again later
+            $ref: "#/components/schemas/InternalServerErrorResponse"
