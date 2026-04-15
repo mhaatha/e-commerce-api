@@ -43,7 +43,7 @@ paths:
                 price: 528.993
                 description: Garansi resmi 1 tahun
       responses:
-        "200":
+        "201":
           description: Success create a new product
           content:
             application/json:
