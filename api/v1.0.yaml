@@ -88,6 +88,7 @@ components:
             - updatedAt
 
     CreateProductBadRequestResponse:
+      description: Bad request response schema
       type: object
       properties:
         error:
@@ -103,6 +104,12 @@ components:
               type: object
               additionalProperties:
                 type: string
+          required:
+            - code
+            - message
+            - fields
+      required:
+        - error
     UnauthorizedResponse:
       description: Unauthorized response schema
       type: object
@@ -116,6 +123,11 @@ components:
             message:
               type: string
               example: Unauthorized user. Please log in to an existing user or register a new user
+          required:
+            - code
+            - message
+      required:
+        - error
     ForbiddenResponse:
       description: Forbidden response schema
       type: object
@@ -129,6 +141,11 @@ components:
             message:
               type: string
               example: Forbidden access. You're not allowed to do this operation
+          required:
+            - code
+            - message
+      required:
+        - error
     InternalServerErrorResponse:
       description: Internal server error response schema
       type: object
@@ -142,6 +159,11 @@ components:
             message:
               type: string
               example: We're sorry your operation can't be executed during this time due to internal problem. Please try again later
+          required:
+            - code
+            - message
+      required:
+        - error
 
   requestBodies:
     CreateProduct:
