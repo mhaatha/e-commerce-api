@@ -13,6 +13,8 @@ paths:
     post:
       summary: Create a new product
       operationId: createProduct
+      security:
+        - BearerAuth: []
       tags:
         - Product API
       requestBody:
@@ -166,3 +168,8 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/InternalServerErrorResponse"
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
