@@ -33,6 +33,10 @@ components:
     ProductBase:
       description: Product base schema
       type: object
+      required:
+        - name
+        - quantity
+        - price
       properties:
         name:
           type: string
