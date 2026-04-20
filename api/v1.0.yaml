@@ -8,6 +8,8 @@ servers:
 tags:
   - name: Product API
     description: Handles product management such as show the products, update it, delete it, etc.
+  - name: Health Check API
+    description: Verify operational status of the application
 paths:
   /api/v1/products:
     post:
@@ -30,10 +32,23 @@ paths:
           $ref: "#/components/responses/CreateProductForbidden"
         "500":
           $ref: "#/components/responses/InternalServerError"
+  /api/v1/health:
+    get:
+      summary: Get the current health status
+      operationId: getCurrentHealthStatus
+      tags:
+        - Health Check API
+      responses:
+        "200":
+          description: Success get the health status of the API
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
 components:
   schemas:
-    ProductBase:
-      description: Product base schema
+    CreateProductRequest:
+      description: Required and optional request body to create a new product
       type: object
       required:
         - name
@@ -51,7 +66,7 @@ components:
           example: 11
         price:
           type: integer
-          description: In Rupiah (Rp)
+          description: price are in Rupiah (Rp)
           minimum: 0
           example: 500000
         description:
@@ -59,35 +74,62 @@ components:
           minLength: 3
           maxLength: 2000
           example: Garansi resmi 1 tahun
-    CreateProductRequest:
-      $ref: "#/components/schemas/ProductBase"
     Product:
-      description: Product data
-      allOf:
-        - type: object
-          properties:
-            id:
-              type: string
-              format: uuid
-              example: dcc02b52-a93e-4326-ae81-d1560f3b91d3
-          required:
-            - id
-        - $ref: "#/components/schemas/ProductBase"
-        - type: object
-          properties:
-            createdAt:
-              type: string
-              format: date-time
-              example: 2026-04-20T14:32:28Z
-            updatedAt:
-              type: string
-              format: date-time
-              example: 2026-04-20T14:32:28Z
-          required:
-            - createdAt
-            - updatedAt
-
-    CreateProductBadRequestResponse:
+      description: Represents a product resource returned by the API
+      type: object
+      required:
+        - id
+        - name
+        - quantity
+        - price
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: dcc02b52-a93e-4326-ae81-d1560f3b91d3
+        name:
+          type: string
+          minLength: 3
+          maxLength: 150
+          example: Kinera Celest Wyvern White
+        quantity:
+          type: integer
+          minimum: 0
+          example: 11
+        price:
+          type: integer
+          description: Represents price in Rupiah (Rp)
+          minimum: 0
+          example: 500000
+        description:
+          type: string
+          minLength: 3
+          maxLength: 2000
+          example: Garansi resmi 1 tahun
+        createdAt:
+          type: string
+          format: date-time
+          example: 2026-04-20T14:32:28Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2026-04-20T14:32:28Z
+    HealthStatus:
+      description: Represents the health status of the API
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Ok
+    BadRequest:
       description: Bad request response schema
       type: object
       properties:
@@ -110,7 +152,7 @@ components:
             - fields
       required:
         - error
-    UnauthorizedResponse:
+    Unauthorized:
       description: Unauthorized response schema
       type: object
       properties:
@@ -128,7 +170,7 @@ components:
             - message
       required:
         - error
-    ForbiddenResponse:
+    Forbidden:
       description: Forbidden response schema
       type: object
       properties:
@@ -146,7 +188,7 @@ components:
             - message
       required:
         - error
-    InternalServerErrorResponse:
+    InternalServerError:
       description: Internal server error response schema
       type: object
       properties:
@@ -185,25 +227,25 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/CreateProductBadRequestResponse"
+            $ref: "#/components/schemas/BadRequest"
     CreateProductUnauthorized:
       description: Failed to create a new product caused by unauthorized user
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/UnauthorizedResponse"
+            $ref: "#/components/schemas/Unauthorized"
     CreateProductForbidden:
       description: Failed to create a new product caused by forbidden access
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ForbiddenResponse"
+            $ref: "#/components/schemas/Forbidden"
     InternalServerError:
       description: Internal server error
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/InternalServerErrorResponse"
+            $ref: "#/components/schemas/InternalServerError"
 
   securitySchemes:
     BearerAuth:
