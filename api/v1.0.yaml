@@ -85,9 +85,8 @@ components:
               example: Invalid request body
             fields:
               type: object
-              properties:
-                additionalProperties:
-                  type: string
+              additionalProperties:
+                type: string
     UnauthorizedResponse:
       description: Unauthorized response schema
       type: object
