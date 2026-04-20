@@ -48,10 +48,10 @@ components:
           minimum: 0
           example: 11
         price:
-          type: number
-          format: float
+          type: integer
+          description: In Rupiah (Rp)
           minimum: 0
-          example: 528.993
+          example: 500000
         description:
           type: string
           minLength: 3
