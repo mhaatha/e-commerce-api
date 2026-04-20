@@ -77,11 +77,11 @@ components:
           properties:
             createdAt:
               type: string
-              format: datetime
+              format: date-time
               example: 2026-04-20T14:32:28Z
             updatedAt:
               type: string
-              format: datetime
+              format: date-time
               example: 2026-04-20T14:32:28Z
           required:
             - createdAt
