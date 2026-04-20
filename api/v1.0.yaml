@@ -64,7 +64,6 @@ components:
     Product:
       description: Product data
       allOf:
-        - $ref: "#/components/schemas/ProductBase"
         - type: object
           properties:
             id:
@@ -73,6 +72,21 @@ components:
               example: dcc02b52-a93e-4326-ae81-d1560f3b91d3
           required:
             - id
+        - $ref: "#/components/schemas/ProductBase"
+        - type: object
+          properties:
+            createdAt:
+              type: string
+              format: datetime
+              example: 2026-04-20T14:32:28Z
+            updatedAt:
+              type: string
+              format: datetime
+              example: 2026-04-20T14:32:28Z
+          required:
+            - createdAt
+            - updatedAt
+
     CreateProductBadRequestResponse:
       type: object
       properties:
