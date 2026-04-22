@@ -1,2 +1,5 @@
 note.txt
 .env
+
+# training ground file
+main.go
