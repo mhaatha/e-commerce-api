@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS product (
+    id uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+    name text NOT NULL,
+    quantity integer NOT NULL DEFAULT 0,
+    price integer NOT NULL DEFAULT 0,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
