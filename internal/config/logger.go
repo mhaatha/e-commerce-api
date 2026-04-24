@@ -8,7 +8,7 @@ import (
 func LogInit() {
 	var logger *slog.Logger
 
-	logger = slog.New(slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{
+	logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
 		AddSource: true,
 		Level:     slog.LevelInfo,
 		ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
