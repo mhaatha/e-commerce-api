@@ -7,7 +7,7 @@ type Product struct {
 	Name        string    `json:"name"`
 	Quantity    int       `json:"quantity"`
 	Price       int       `json:"price"`
-	Description string    `json:"description"`
+	Description string    `json:"description,omitempty"`
 	CreatedAt   time.Time `json:"createdAt"`
 	UpdatedAt   time.Time `json:"updatedAt"`
 }
